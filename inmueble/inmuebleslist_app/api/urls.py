@@ -4,8 +4,8 @@ from inmuebleslist_app.api.views import EdificacionAV,EdificacionDetalleAV,Empre
 
 urlpatterns = [
     path('list/',EdificacionAV.as_view(),name='edificacion'),
-    path('<int:pk>',EdificacionDetalleAV.as_view(),name='edificacion_detalle'),
+    path('<int:pk>',EdificacionDetalleAV.as_view(),name='edificacion-detail'),
     path('empresa/',EmpresaAV.as_view(),name='empresa'),
-    path('<int:pk>',EmpresaDetalleAV.as_view(),name='empresa_detalle'),
+    path('empresa/<int:pk>',EmpresaDetalleAV.as_view(),name='empresa-detail'),
     
 ]
