@@ -19,7 +19,7 @@ class EdificacionSerializer(serializers.ModelSerializer):
         # fields = ['id','pais','activate','imagen']
         # exclude =['id']
 
-class EmpresaSerializer(serializers.HyperlinkedModelSerializer):
+class EmpresaSerializer(serializers.ModelSerializer):
     edificacionlist = EdificacionSerializer(many=True,read_only=True)
     # edificacionlist = serializers.StringRelatedField(many=True)
     # edificacionlist = serializers.PrimaryKeyRelatedField(many=True,read_only=True)

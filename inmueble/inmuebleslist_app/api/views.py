@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import  generics,mixins
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
 
 class ComentarioCreate(generics.CreateAPIView):
     serializer_class = ComentarioSerializer
@@ -51,7 +53,19 @@ class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-
+class EmpresaVS(viewsets.ViewSet):
+    
+    def list(self,request):
+        queryset= Empresa.objects.all()
+        serializer = EmpresaSerializer(queryset,many=True)
+        return Response(serializer.data)
+    
+    def retrieve(self, request, pk=None):
+        queryset=Empresa.objects.all()
+        edificacionlist = get_object_or_404(queryset,pk=pk)
+        serializer=EmpresaSerializer(edificacionlist)
+        return Response(serializer.data)
+        
 
 class EmpresaAV(APIView):
 
