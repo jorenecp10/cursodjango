@@ -9,7 +9,7 @@ from rest_framework import viewsets
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
-from inmuebleslist_app.api.permissions import AdminOrReadOnly
+from inmuebleslist_app.api.permissions import AdminOrReadOnly,ComentarioUserOrReadOnly
 
 class ComentarioCreate(generics.CreateAPIView):
     serializer_class = ComentarioSerializer
@@ -23,6 +23,14 @@ class ComentarioCreate(generics.CreateAPIView):
         comentario_queryset = Comentario.objects.filter(edificacion=inmueble,comentario_user=user)
         if comentario_queryset.exists():
             raise ValidationError("El usuario ya escribio un comentario para este inmueble")
+        
+        if inmueble.number_calificacion == 0:
+            inmueble.avg_calificacion = 5
+        else:
+            inmueble.avg_calificacion = (serializer.validated_data['calificacion'] + inmueble.avg_calificacion)/2
+            
+        inmueble.number_calificacion = inmueble.number_calificacion + 1
+        inmueble.save()
         serializer.save(edificacion=inmueble,comentario_user=user)
         
 
@@ -36,8 +44,10 @@ class ComentarioList(generics.ListCreateAPIView):
 
         
 class ComentarioDetail(generics.RetrieveUpdateDestroyAPIView):
+    
     queryset = Comentario.objects.all()
     serializer_class = ComentarioSerializer
+    permission_classes = [ComentarioUserOrReadOnly]
     
     
 
